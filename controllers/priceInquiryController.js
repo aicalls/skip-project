@@ -1,3 +1,4 @@
+const { wasteModel } = require("../schemas/wasteSchema");
 const ZoneModel = require("../schemas/zonesSchema");
 const utils = require("./utils");
 
@@ -34,6 +35,37 @@ const costInquiry = async (req) => {
     );
   }
 };
+const calculateWasteDetails = async (req) => {
+  const session = req.body?.pageInfo?.currentPage;
+  let parameters = req.body?.sessionInfo?.parameters;
+  let price = parameters?.price ?? 0;
+  const wasteFind = await wasteModel.findOne({
+    name: parameters.wasteitem,
+  });
+  console.log(wasteFind);
+  if (wasteFind) {
+    let wastePrice = wasteFind.price * (parameters?.wastequantity ?? 1);
+    parameters = { ...parameters, price: price + wastePrice };
+    return utils.formatResponseForDialogflow(
+      [
+        `That's great, The price of ${parameters?.wastequantity} ${parameters?.wasteitem} is €${wastePrice} pounds`,
+      ],
+      { session, parameters },
+      "",
+      ""
+    );
+  } else {
+    parameters = { ...parameters, wasteitem: null };
+    return utils.formatResponseForDialogflow(
+      [
+        "Sorry, unfortunately we couldn't find your waste item, please try again",
+      ],
+      { session },
+      "",
+      ""
+    );
+  }
+};
 const controlledWaste = (req) => {
   const session = req.body?.pageInfo?.currentPage;
   let parameters = req.body?.sessionInfo?.parameters;
@@ -57,4 +89,4 @@ const controlledWaste = (req) => {
   );
 };
 
-module.exports = { controlledWaste, costInquiry };
+module.exports = { controlledWaste, costInquiry, calculateWasteDetails };

@@ -13,6 +13,10 @@ router.post("/priceInquiry", async (req, res) => {
       let responseData =
         await CONTROLLER.priceInquiryController.controlledWaste(req);
       res.send(responseData);
+    } else if (tag === "calculateWasteDetails") {
+      let responseData =
+        await CONTROLLER.priceInquiryController.calculateWasteDetails(req);
+      res.send(responseData);
     } else if (tag === "costInquiry") {
       let responseData = await CONTROLLER.priceInquiryController.costInquiry(
         req

@@ -9,6 +9,11 @@ router.post("/priceInquiry", async (req, res) => {
   console.log(tag);
   console.log("Find Parameter", req.body);
   try {
+    if (tag === "testApi") {
+      let responseData =
+        await CONTROLLER.priceInquiryController.intentTestPurpose(req);
+      res.send(responseData);
+    }
     if (tag === "controlledWaste") {
       let responseData =
         await CONTROLLER.priceInquiryController.controlledWaste(req);

@@ -2,6 +2,17 @@ const { wasteModel } = require("../schemas/wasteSchema");
 const ZoneModel = require("../schemas/zonesSchema");
 const utils = require("./utils");
 
+const intentTestPurpose = async (req) => {
+  const session = req.body?.pageInfo?.currentPage;
+  let parameters = req.body?.sessionInfo?.parameters;
+
+  return utils.formatResponseForDialogflow(
+    ["Testing session for checking purpose"],
+    { session },
+    "",
+    ""
+  );
+};
 const costInquiry = async (req) => {
   const session = req.body?.pageInfo?.currentPage;
   let parameters = req.body?.sessionInfo?.parameters;
@@ -39,17 +50,27 @@ const calculateWasteDetails = async (req) => {
   const session = req.body?.pageInfo?.currentPage;
   let parameters = req.body?.sessionInfo?.parameters;
   let price = parameters?.price ?? 0;
-  const wasteFind = await wasteModel.findOne({
-    name: parameters.wasteitem,
+  console.log("Parameters===>", parameters);
+  const wasteFind = await wasteModel.find({
+    name: { $in: parameters.wasteitem.map((res) => res) },
   });
-  console.log(wasteFind);
-  if (wasteFind) {
-    let wastePrice = wasteFind.price * (parameters?.wastequantity ?? 1);
-    parameters = { ...parameters, price: price + wastePrice };
+  if (wasteFind && wasteFind?.length > 0) {
+    let response = [];
+    let totalWastePrice = 0;
+    wasteFind.forEach((res, index) => {
+      totalWastePrice += parseInt(
+        res.price * (parameters?.wastequantity[index] ?? 1)
+      );
+      response.push(
+        `${parameters?.wastequantity[index]} ${res.name} price is ${
+          res.price * (parameters?.wastequantity[index] ?? 1)
+        }`
+      );
+    });
+    parameters = { ...parameters, price: price + totalWastePrice };
+    response.push(`your total waste price is ${price + totalWastePrice}`);
     return utils.formatResponseForDialogflow(
-      [
-        `That's great, The price of ${parameters?.wastequantity} ${parameters?.wasteitem} is €${wastePrice} pounds`,
-      ],
+      response,
       { session, parameters },
       "",
       ""
@@ -89,4 +110,9 @@ const controlledWaste = (req) => {
   );
 };
 
-module.exports = { controlledWaste, costInquiry, calculateWasteDetails };
+module.exports = {
+  controlledWaste,
+  costInquiry,
+  calculateWasteDetails,
+  intentTestPurpose,
+};

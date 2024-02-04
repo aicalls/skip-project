@@ -2,17 +2,6 @@ const { wasteModel } = require("../schemas/wasteSchema");
 const ZoneModel = require("../schemas/zonesSchema");
 const utils = require("./utils");
 
-const intentTestPurpose = async (req) => {
-  const session = req.body?.pageInfo?.currentPage;
-  let parameters = req.body?.sessionInfo?.parameters;
-
-  return utils.formatResponseForDialogflow(
-    ["Testing session for checking purpose"],
-    { session },
-    "",
-    ""
-  );
-};
 const costInquiry = async (req) => {
   const session = req.body?.pageInfo?.currentPage;
   let parameters = req.body?.sessionInfo?.parameters;
@@ -113,6 +102,5 @@ const controlledWaste = (req) => {
 module.exports = {
   controlledWaste,
   costInquiry,
-  calculateWasteDetails,
-  intentTestPurpose,
+  calculateWasteDetails
 };

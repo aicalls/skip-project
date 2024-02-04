@@ -3,24 +3,15 @@ const router = express.Router();
 
 const CONTROLLER = require("../controllers/export_controllers");
 
-router.post("/priceInquiry", async (req, res) => {
+router.post("/orderInquiry", async (req, res) => {
   let tag = req.body.fulfillmentInfo.tag;
-  console.log("A new request came...");
+  console.log("In Order Webhook Requests..>!");
   console.log(tag);
   console.log("Find Parameter", req.body);
   try {
-    if (tag === "controlledWaste") {
+    if (tag === "createOrder") {
       let responseData =
-        await CONTROLLER.priceInquiryController.controlledWaste(req);
-      res.send(responseData);
-    } else if (tag === "calculateWasteDetails") {
-      let responseData =
-        await CONTROLLER.priceInquiryController.calculateWasteDetails(req);
-      res.send(responseData);
-    } else if (tag === "costInquiry") {
-      let responseData = await CONTROLLER.priceInquiryController.costInquiry(
-        req
-      );
+        await CONTROLLER.orderInquiryController.makeOrderInvoice(req);
       res.send(responseData);
     } else {
       res.send(

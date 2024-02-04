@@ -1,9 +1,9 @@
 const utils = require("./utils");
 const priceInquiryController = require("./priceInquiryController");
-const skipAvailabilityController = require("./skipAvailabilityController");
+const orderInquiryController = require("./orderInquiryController");
 
 module.exports = {
   priceInquiryController,
+  orderInquiryController,
   utils,
-  skipAvailabilityController,
 };

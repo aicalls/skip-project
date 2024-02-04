@@ -1,6 +1,7 @@
 // import Files, Libraries and Modules
 const express = require("express");
 const priceInquiryRoutes = require("../routes/priceInquiryRoutes");
+const orderInquiryRoutes = require("../routes/orderInquiryRoutes");
 const cookieParser = require("cookie-parser");
 const actuator = require("express-actuator");
 const compression = require("compression");
@@ -60,7 +61,7 @@ process.on("uncaughtException", (err) => {
 const port = process.env.PORT ?? 5000;
 
 app.use(priceInquiryRoutes.router);
-
+app.use(orderInquiryRoutes.router);
 // default route
 app.use((req, res, next) => {
   res

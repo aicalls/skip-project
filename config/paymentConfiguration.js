@@ -1,19 +1,38 @@
 require("dotenv").config();
 const stripe = require("stripe")(process.env.SECRETE_KEY);
 
-const createCustomer = async (data) => {
-  const { name, phone, email, description = "" } = data;
+const createCustomerAndCharge = async (data) => {
+  const { name, phone, email, token, amount } = data;
+
   try {
+    let result = {};
+    // Create a customer with the token
     const customer = await stripe.customers.create({
       name,
       phone,
       email,
-      description,
+      description: "Customer for test",
+      source: token, // Use the token as the payment source
     });
-    console.log("Final Customer: ", customer);
-    return { success: true, customer };
+
+    console.log("Created Customer: ", customer);
+
+    // Charge the customer immediately
+    const charge = await stripe.charges
+      .create({
+        amount: amount * 100, // Convert amount to cents
+        currency: "USD",
+        description: "Charge for product/service",
+        customer: customer.id,
+      })
+      .then(() => {
+        result = { success: true, redirect: "/success" };
+      })
+      .catch((err) => {
+        result = { success: true, redirect: "/failure" };
+      });
   } catch (error) {
-    console.error("Catcher Error: ", error.message);
+    console.error("Error creating customer and charge: ", error.message);
     return { success: false, message: error.message };
   }
 };
@@ -53,6 +72,18 @@ const createPayment = async (data) => {
   }
 };
 
+const paymentIntentFunc = async ({ amount, currency }) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: currency ?? "USD",
+    });
+    return { success: true, clientSecret: paymentIntent.clientSecret };
+  } catch (error) {
+    return { success: true, message: error.message };
+  }
+};
+
 const createInvoiceAndPayment = async (data) => {
   try {
     const customerDetails = await createCustomer(data);
@@ -88,7 +119,7 @@ const createInvoiceAndPayment = async (data) => {
 };
 
 module.exports = {
-  createCustomer,
+  createCustomerAndCharge,
   createPayment,
   createInvoiceAndPayment,
 };

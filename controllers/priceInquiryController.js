@@ -10,6 +10,8 @@ const costInquiry = async (req) => {
     postCodes: parameters.postcode,
     "prices.skipType": parameters.skipsize,
   });
+  console.log("parameters===>", {postcode:parameters.postcode,skipsize:parameters.skipsize});
+  console.log("zonesFind===>", zonesFind);
   if (zonesFind) {
     let prices = zonesFind.prices.filter(
       (res) => res.skipType === parameters.skipsize
@@ -24,13 +26,14 @@ const costInquiry = async (req) => {
       ],
       { session, parameters },
       "",
-      ""
+      "2f59669d-6c31-4ab0-8185-67fd01d445c7"
     );
   } else {
+    parameters = { ...parameters, postcode: null };
     return utils.formatResponseForDialogflow(
       ["Unable to find your required destination price for your skip"],
-      { session },
-      "",
+      { session: "f2a6c0e1-7b88-4265-925c-ace7876ef457" },
+      "00000000-0000-0000-0000-000000000000",
       ""
     );
   }
@@ -61,7 +64,7 @@ const calculateWasteDetails = async (req) => {
     return utils.formatResponseForDialogflow(
       response,
       { session, parameters },
-      "",
+      "00000000-0000-0000-0000-000000000000",
       ""
     );
   } else {
@@ -70,9 +73,11 @@ const calculateWasteDetails = async (req) => {
       [
         "Sorry, unfortunately we couldn't find your waste item, please try again",
       ],
-      { session },
+      { session: "f2a6c0e1-7b88-4265-925c-ace7876ef457" },
       "",
-      ""
+      "",
+      null,
+      true
     );
   }
 };
@@ -102,5 +107,5 @@ const controlledWaste = (req) => {
 module.exports = {
   controlledWaste,
   costInquiry,
-  calculateWasteDetails
+  calculateWasteDetails,
 };

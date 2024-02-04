@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const actuator = require("express-actuator");
 const compression = require("compression");
 const helmet = require("helmet");
+const path = require('path');
 const connectToDb = require("../config/db_config");
 const morgan = require("morgan");
 const cacheController = require("express-cache-controller");
@@ -16,6 +17,9 @@ const cors = require("cors");
 // Call required middle
 const app = express();
 
+app.set('view engine', 'ejs');
+console.log(__dirname, './views');
+app.set('views', path.join(__dirname, './views'));
 connectToDb();
 
 app.use(
@@ -49,7 +53,6 @@ app.set("trust proxy", 1); // trust first proxy
 
 // Custom error handler
 app.use(errorHandler);
-
 // Call process which is take look of uncaught exception.
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`);

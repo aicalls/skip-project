@@ -1,7 +1,17 @@
 const express = require("express");
+const orderInquiryController = require("../controllers/orderInquiryController");
 const router = express.Router();
 
 const CONTROLLER = require("../controllers/export_controllers");
+router.get('/payment', async (req, res) => {
+  res.redirect("/buy")
+});
+router.get('/success', async (req, res) => {
+  res.redirect("/success")
+});
+router.get('/failure', async (req, res) => {
+  res.redirect("/failure")
+});
 
 router.post("/orderInquiry", async (req, res) => {
   let tag = req.body.fulfillmentInfo.tag;

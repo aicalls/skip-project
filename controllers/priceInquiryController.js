@@ -60,7 +60,7 @@ const calculateWasteDetails = async (req) => {
       );
     });
     parameters = { ...parameters, price: price + totalWastePrice };
-    response.push(`your total waste price is ${price + totalWastePrice}`);
+    response.push(`your total waste price is ${price + totalWastePrice} €`);
     return utils.formatResponseForDialogflow(
       response,
       { session, parameters },

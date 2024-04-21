@@ -4,10 +4,10 @@ const router = express.Router();
 const CONTROLLER = require("../controllers/export_controllers");
 
 router.post("/priceInquiry", async (req, res) => {
-  let tag = req.body.fulfillmentInfo.tag;
+  let tag = req?.body?.fulfillmentInfo?.tag;
   console.log("A new request came...");
   console.log(tag);
-  console.log("Find Parameter", req.body);
+  console.log("Find Parameter", req?.body);
   try {
     if (tag === "controlledWaste") {
       let responseData =

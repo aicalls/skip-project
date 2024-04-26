@@ -45,9 +45,9 @@ const makeOrderInvoice = async (req) => {
   //   expYear: parameters?.expyear,
   //   cvc: parameters?.cvc,
   // });
-
+  let response=parameters?.paytype==="Cash on Delivery"?["Thank you for choosing us. We'll confirm your order via email and SMS. Please review our terms and conditions. For any queries, reach us at 01924 637777 during office hours."]:[`Thank you for choosing us. During office hours, a team member will contact you on your mobile to process a card transaction. Outside office hours, you will receive a call once the office reopens. Our trading hours are 8am to 5pm from Monday to Saturday; we are closed on Sundays.`]
   return utils.formatResponseForDialogflow(
-    [``],
+    [response],
     { session, parameters },
     "",
     ""

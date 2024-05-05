@@ -118,7 +118,25 @@ const createInvoiceAndPayment = async (data) => {
   }
 };
 
+const createPaymentLink = async (amount) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price: amount || 0,
+          quantity: 1,
+        },
+      ],
+      mode: "payment"
+    });
+    return { success: true, url: session.url };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
+  createPaymentLink,
   createCustomerAndCharge,
   createPayment,
   createInvoiceAndPayment,

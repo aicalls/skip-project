@@ -14,6 +14,7 @@ const cacheController = require("express-cache-controller");
 const { errorHandler } = require("../utils/customErrorHandler");
 const { debug } = require("console");
 const cors = require("cors");
+const { sendEmail } = require("../config/mailer");
 
 // Call required middle
 const app = express();
@@ -67,6 +68,17 @@ const port = process.env.PORT ?? 5000;
 app.use(priceInquiryRoutes.router);
 app.use(orderInquiryRoutes.router);
 app.use(collectionInquiryRoutes.router);
+
+app.post('/send-email', async (req, res) => {
+  const { to, subject, text } = req.body;
+
+  try {
+    const response = await sendEmail(to, subject, text);
+    res.status(200).send('Email sent: ' + response);
+  } catch (error) {
+    res.status(500).send(error.toString());
+  }
+});
 // default route
 app.use((req, res, next) => {
   res

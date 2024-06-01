@@ -2,6 +2,7 @@
 const express = require("express");
 const priceInquiryRoutes = require("../routes/priceInquiryRoutes");
 const orderInquiryRoutes = require("../routes/orderInquiryRoutes");
+const collectionInquiryRoutes = require("../routes/collectionInquiryRoutes");
 const cookieParser = require("cookie-parser");
 const actuator = require("express-actuator");
 const compression = require("compression");
@@ -65,6 +66,7 @@ const port = process.env.PORT ?? 5000;
 
 app.use(priceInquiryRoutes.router);
 app.use(orderInquiryRoutes.router);
+app.use(collectionInquiryRoutes.router);
 // default route
 app.use((req, res, next) => {
   res

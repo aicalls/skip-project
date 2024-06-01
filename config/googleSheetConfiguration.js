@@ -2,7 +2,7 @@ const { google } = require("googleapis");
 const sheets = google.sheets("v4");
 const credentials = require("./credentials.json");
 
-async function accessGoogleSheet(data) {
+async function accessGoogleSheet(data,sheetNo="Sheet1") {
   try {
     const client = new google.auth.JWT(
       credentials.client_email,
@@ -13,7 +13,7 @@ async function accessGoogleSheet(data) {
     const auth = await client.authorize();
     // Specify the spreadsheet ID and range
     const spreadsheetId = process.env.SPREAD_SHEET_ID; // Replace with your actual spreadsheet ID
-    const range = "Sheet1"; // Replace with the sheet name or range where you want to add data
+    const range = sheetNo; // Replace with the sheet name or range where you want to add data
 
     // Example data to add to the sheet
 

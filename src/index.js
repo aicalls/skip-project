@@ -69,16 +69,16 @@ app.use(priceInquiryRoutes.router);
 app.use(orderInquiryRoutes.router);
 app.use(collectionInquiryRoutes.router);
 
-app.post('/send-email', async (req, res) => {
-  const { to, subject, text } = req.body;
+// app.post('/send-email', async (req, res) => {
+//   const { to, subject, text } = req.body;
 
-  try {
-    const response = await sendEmail(to, subject, text);
-    res.status(200).send('Email sent: ' + response);
-  } catch (error) {
-    res.status(500).send(error.toString());
-  }
-});
+//   try {
+//     const response = await sendEmail(to, subject, text);
+//     res.status(200).send('Email sent: ' + response);
+//   } catch (error) {
+//     res.status(500).send(error.toString());
+//   }
+// });
 // default route
 app.use((req, res, next) => {
   res
